@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Inscription</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<main class="page-shell">
+		<section class="form-card" aria-labelledby="page-title">
+			<div class="intro">
+				<p class="eyebrow">Espace membre</p>
+				<h1 id="page-title">Créer votre compte</h1>
+				<p>Renseignez vos informations pour finaliser votre inscription.</p>
+			</div>
+
+			<form id="registration-form" novalidate>
+				<div id="form-message" class="form-message" role="alert" aria-live="polite"></div>
+
+				<div class="form-grid">
+					<div class="field">
+						<label for="login">Login <span aria-hidden="true">*</span></label>
+						<input type="text" id="login" name="login" autocomplete="username" required>
+					</div>
+
+					<div class="field">
+						<label for="email">Email <span aria-hidden="true">*</span></label>
+						<input type="email" id="email" name="email" autocomplete="email" required>
+					</div>
+
+					<div class="field">
+						<label for="password">Mot de passe <span aria-hidden="true">*</span></label>
+						<input type="password" id="password" name="password" autocomplete="new-password" required>
+					</div>
+
+					<div class="field">
+						<label for="password-confirmation">Confirmation du mot de passe <span aria-hidden="true">*</span></label>
+						<input type="password" id="password-confirmation" name="password-confirmation" autocomplete="new-password" required>
+					</div>
+
+					<div class="field">
+						<label for="last-name">Nom <span aria-hidden="true">*</span></label>
+						<input type="text" id="last-name" name="last-name" autocomplete="family-name" required>
+					</div>
+
+					<div class="field">
+						<label for="first-name">Prénom <span aria-hidden="true">*</span></label>
+						<input type="text" id="first-name" name="first-name" autocomplete="given-name" required>
+					</div>
+
+					<div class="field field-full">
+						<label for="address">Adresse <span aria-hidden="true">*</span></label>
+						<input type="text" id="address" name="address" autocomplete="street-address" required>
+					</div>
+
+					<div class="field">
+						<label for="phone">Téléphone <span aria-hidden="true">*</span></label>
+						<input type="tel" id="phone" name="phone" autocomplete="tel" required>
+					</div>
+
+					<div class="field">
+						<label for="birth-date">Date de naissance <span aria-hidden="true">*</span></label>
+						<input type="date" id="birth-date" name="birth-date" autocomplete="bday" required>
+					</div>
+				</div>
+
+				<p class="required-note"><span aria-hidden="true">*</span> Champs obligatoires à remplir</p>
+				<button type="submit">S’inscrire <span aria-hidden="true">→</span></button>
+			</form>
+
+			<section id="summary" class="summary" hidden aria-labelledby="summary-title">
+				<div class="success-mark" aria-hidden="true">✓</div>
+				<p class="eyebrow">Inscription terminée</p>
+				<h2 id="summary-title">Bienvenue parmi nous !</h2>
+				<p class="summary-intro">Voici le récapitulatif des informations transmises.</p>
+				<dl id="summary-list" class="summary-list"></dl>
+				<button type="button" id="edit-button" class="secondary-button">Modifier mes informations</button>
+			</section>
+		</section>
+	</main>
+
+	<script src="script.js"></script>
+</body>
+</html>
+
