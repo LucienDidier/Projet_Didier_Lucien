@@ -1,0 +1,60 @@
+<main class="page">
+	<section class="form-panel" aria-labelledby="form-title">
+		<div class="eyebrow"><span class="eyebrow-mark"></span> Espace membre</div>
+		<h1 id="form-title">Créer un compte</h1>
+		<p class="intro">Renseignez vos informations pour commencer.</p>
+
+		<form #form="ngForm" (ngSubmit)="submit(form)" novalidate>
+			<div class="name-fields">
+				<label class="field">
+					<span>Nom</span>
+					<input type="text" name="lastName" [(ngModel)]="lastName" #lastNameInput="ngModel" required autocomplete="family-name" />
+					@if (lastNameInput.touched && lastNameInput.invalid) {
+						<small class="error">Le nom est requis.</small>
+					}
+				</label>
+
+				<label class="field">
+					<span>Prénom</span>
+					<input type="text" name="firstName" [(ngModel)]="firstName" #firstNameInput="ngModel" required autocomplete="given-name" />
+					@if (firstNameInput.touched && firstNameInput.invalid) {
+						<small class="error">Le prénom est requis.</small>
+					}
+				</label>
+			</div>
+
+			<label class="field">
+				<span>Email</span>
+				<input type="email" name="email" [(ngModel)]="email" #emailInput="ngModel" required email autocomplete="email" />
+				@if (emailInput.touched && emailInput.hasError('required')) {
+					<small class="error">L’adresse email est requise.</small>
+				} @else if (emailInput.touched && emailInput.hasError('email')) {
+					<small class="error">Saisissez une adresse email valide.</small>
+				}
+			</label>
+
+			<label class="field">
+				<span>Mot de passe</span>
+				<input type="password" name="password" [(ngModel)]="password" #passwordInput="ngModel" required autocomplete="new-password" />
+				@if (passwordInput.touched && passwordInput.invalid) {
+					<small class="error">Le mot de passe est requis.</small>
+				}
+			</label>
+
+			<label class="field">
+				<span>Confirmation du mot de passe</span>
+				<input type="password" name="passwordConfirmation" [(ngModel)]="passwordConfirmation" #confirmationInput="ngModel" required autocomplete="new-password" />
+				@if (confirmationInput.touched && confirmationInput.hasError('required')) {
+					<small class="error">La confirmation est requise.</small>
+				} @else if (confirmationInput.touched && password !== passwordConfirmation) {
+					<small class="error">Les mots de passe ne correspondent pas.</small>
+				}
+			</label>
+
+			<button type="submit">Créer mon compte <span aria-hidden="true">→</span></button>
+			@if (submitted) {
+				<p class="success" role="status">Le formulaire est valide.</p>
+			}
+		</form>
+	</section>
+</main>
