@@ -1,0 +1,94 @@
+<main class="page">
+	@if (report; as submittedReport) {
+		<app-pollution-recap [report]="submittedReport" />
+	} @else {
+		<section class="form-panel" aria-labelledby="form-title">
+			<div class="eyebrow"><span class="eyebrow-mark"></span> Signalement citoyen</div>
+			<h1 id="form-title">Déclarer une pollution</h1>
+			<p class="intro">Partagez les informations observées pour documenter le signalement.</p>
+
+			<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+				<label class="field">
+					<span>Titre de la pollution</span>
+					<input id="title" type="text" formControlName="title" autocomplete="off" />
+					@if (form.controls.title.touched && form.controls.title.invalid) {
+						<small class="error">Le titre est requis.</small>
+					}
+				</label>
+
+				<div class="field-grid">
+					<label class="field">
+						<span>Type de pollution</span>
+						<select id="type" formControlName="type">
+							<option value="" disabled>Sélectionner un type</option>
+							@for (type of pollutionTypes; track type) {
+								<option [value]="type">{{ type }}</option>
+							}
+						</select>
+						@if (form.controls.type.touched && form.controls.type.invalid) {
+							<small class="error">Sélectionnez un type de pollution.</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Date de l’observation</span>
+						<input id="observedAt" type="date" formControlName="observedAt" />
+						@if (form.controls.observedAt.touched && form.controls.observedAt.hasError('required')) {
+							<small class="error">La date est requise.</small>
+						} @else if (form.controls.observedAt.touched && form.controls.observedAt.hasError('invalidDate')) {
+							<small class="error">Saisissez une date valide.</small>
+						}
+					</label>
+				</div>
+
+				<label class="field">
+					<span>Description</span>
+					<textarea id="description" formControlName="description" rows="4"></textarea>
+					@if (form.controls.description.touched && form.controls.description.invalid) {
+						<small class="error">La description est requise.</small>
+					}
+				</label>
+
+				<label class="field">
+					<span>Lieu</span>
+					<input id="location" type="text" formControlName="location" autocomplete="street-address" />
+					@if (form.controls.location.touched && form.controls.location.invalid) {
+						<small class="error">Le lieu est requis.</small>
+					}
+				</label>
+
+				<div class="field-grid">
+					<label class="field">
+						<span>Latitude</span>
+						<input id="latitude" type="number" formControlName="latitude" min="-90" max="90" step="any" />
+						@if (form.controls.latitude.touched && form.controls.latitude.hasError('required')) {
+							<small class="error">La latitude est requise.</small>
+						} @else if (form.controls.latitude.touched && form.controls.latitude.invalid) {
+							<small class="error">La latitude doit être comprise entre -90 et 90.</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Longitude</span>
+						<input id="longitude" type="number" formControlName="longitude" min="-180" max="180" step="any" />
+						@if (form.controls.longitude.touched && form.controls.longitude.hasError('required')) {
+							<small class="error">La longitude est requise.</small>
+						} @else if (form.controls.longitude.touched && form.controls.longitude.invalid) {
+							<small class="error">La longitude doit être comprise entre -180 et 180.</small>
+						}
+					</label>
+				</div>
+
+				<label class="field">
+					<span>Photo (URL) <span class="optional">Optionnel</span></span>
+					<input id="photoUrl" type="url" formControlName="photoUrl" placeholder="https://…" />
+					@if (form.controls.photoUrl.touched && form.controls.photoUrl.invalid) {
+						<small class="error">Saisissez une URL commençant par http:// ou https://.</small>
+					}
+				</label>
+
+				<button type="submit">Déclarer <span aria-hidden="true">→</span></button>
+			</form>
+		</section>
+	}
+</main>
