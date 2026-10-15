@@ -1,0 +1,82 @@
+<div class="signup-page">
+	<section class="signup-panel" aria-labelledby="signup-title">
+		<div class="eyebrow"><span class="eyebrow-mark"></span> Créer un compte</div>
+		<h1 id="signup-title">Inscription</h1>
+		<p class="intro">Créez votre compte pour rejoindre la plateforme.</p>
+
+		<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+			<label class="field">
+				<span>Nom</span>
+				<input
+					id="name"
+					type="text"
+					formControlName="name"
+					autocomplete="name"
+					maxlength="80"
+				/>
+				@if (form.controls.name.touched && form.controls.name.hasError('required')) {
+					<small class="error">Le nom est requis.</small>
+				} @else if (form.controls.name.touched && form.controls.name.hasError('blank')) {
+					<small class="error">Le nom ne peut pas contenir uniquement des espaces.</small>
+				} @else if (form.controls.name.touched && form.controls.name.hasError('minlength')) {
+					<small class="error">Le nom doit contenir au moins 2 caractères.</small>
+				} @else if (form.controls.name.touched && form.controls.name.hasError('maxlength')) {
+					<small class="error">Le nom ne peut pas dépasser 80 caractères.</small>
+				} @else if (form.controls.name.touched && form.controls.name.hasError('pattern')) {
+					<small class="error">Utilisez des lettres, espaces, apostrophes ou traits d’union, sans chiffres.</small>
+				}
+			</label>
+
+			<label class="field">
+				<span>Adresse e-mail</span>
+				<input
+					id="email"
+					type="email"
+					formControlName="email"
+					autocomplete="email"
+					maxlength="254"
+				/>
+				@if (form.controls.email.touched && form.controls.email.hasError('required')) {
+					<small class="error">L’adresse e-mail est requise.</small>
+				} @else if (form.controls.email.touched && form.controls.email.hasError('blank')) {
+					<small class="error">L’adresse e-mail ne peut pas contenir uniquement des espaces.</small>
+				} @else if (form.controls.email.touched && form.controls.email.hasError('maxlength')) {
+					<small class="error">L’adresse e-mail ne peut pas dépasser 254 caractères.</small>
+				} @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+					<small class="error">Saisissez une adresse e-mail valide.</small>
+				}
+			</label>
+
+			<label class="field">
+				<span>Mot de passe</span>
+				<input
+					id="password"
+					type="password"
+					formControlName="password"
+					autocomplete="new-password"
+					maxlength="128"
+				/>
+				@if (form.controls.password.touched && form.controls.password.hasError('required')) {
+					<small class="error">Le mot de passe est requis.</small>
+				} @else if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+					<small class="error">Le mot de passe doit contenir au moins 8 caractères.</small>
+				} @else if (form.controls.password.touched && form.controls.password.hasError('maxlength')) {
+					<small class="error">Le mot de passe ne peut pas dépasser 128 caractères.</small>
+				} @else if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
+					<small class="error">Ajoutez une minuscule, une majuscule, un chiffre et un caractère spécial.</small>
+				}
+			</label>
+
+			<button type="submit" [disabled]="isSubmitting">
+				{{ isSubmitting ? 'Inscription en cours…' : 'Créer mon compte' }}
+			</button>
+		</form>
+
+		@if (successMessage) {
+			<p class="feedback success" role="status">{{ successMessage }}</p>
+		}
+		@if (errorMessage) {
+			<p class="feedback error" role="alert">{{ errorMessage }}</p>
+		}
+	</section>
+</div>
