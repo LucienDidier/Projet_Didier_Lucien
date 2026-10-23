@@ -1,49 +1,49 @@
 {
-  "hash": "860fa009",
-  "configHash": "c70f2cdf",
+  "hash": "8c7e3976",
+  "configHash": "01c3d753",
   "lockfileHash": "1794d642",
-  "browserHash": "e8f73773",
+  "browserHash": "ebc81181",
   "optimized": {
+    "@angular/common/http": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "999e643f",
+      "needsInterop": false
+    },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "1005fdb8",
+      "fileHash": "f2e4b056",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "82fde091",
+      "fileHash": "d04cc4d6",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "3607f112",
-      "needsInterop": false
-    },
-    "@angular/router": {
-      "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
-      "file": "@angular_router.js",
-      "fileHash": "eca8f2d0",
+      "fileHash": "1e686654",
       "needsInterop": false
     }
   },
   "chunks": {
-    "common-J3JAjnFi": {
-      "file": "common-J3JAjnFi.js",
+    "_platform_location-chunk-DMAzVxEu": {
+      "file": "_platform_location-chunk-DMAzVxEu.js",
       "isDynamicEntry": false
     },
-    "core-Dl1ZlCfZ": {
-      "file": "core-Dl1ZlCfZ.js",
+    "common-CsdLrflz": {
+      "file": "common-CsdLrflz.js",
       "isDynamicEntry": false
     },
-    "createObject-D3fkcyp3": {
-      "file": "createObject-D3fkcyp3.js",
+    "core-DY1qa7fM": {
+      "file": "core-DY1qa7fM.js",
       "isDynamicEntry": false
     },
-    "platform-browser-DL04VSXe": {
-      "file": "platform-browser-DL04VSXe.js",
+    "http-DeOyYIsY": {
+      "file": "http-DeOyYIsY.js",
       "isDynamicEntry": false
     }
   }

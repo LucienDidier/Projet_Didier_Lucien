@@ -7,7 +7,9 @@
 
 	min-height: 100vh;
 	display: grid;
+	align-content: start;
 	place-items: center;
+	gap: 24px;
 	box-sizing: border-box;
 	padding: 48px 20px;
 	color: var(--ink);
@@ -18,15 +20,24 @@
 	font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
 }
 
-.form-panel {
-	width: min(100%, 760px);
+.form-panel,
+.list-panel {
 	box-sizing: border-box;
-	padding: 40px 44px 44px;
 	border: 1px solid #223957;
 	border-radius: 8px;
 	background: rgb(15 29 47 / 96%);
 	box-shadow: 0 20px 60px rgb(0 0 0 / 28%);
 	animation: arrive 420ms ease-out both;
+}
+
+.form-panel {
+	width: min(100%, 760px);
+	padding: 40px 44px 44px;
+}
+
+.list-panel {
+	width: min(100%, 900px);
+	padding: 36px 40px 40px;
 }
 
 .eyebrow {
@@ -55,6 +66,21 @@ h1 {
 	line-height: 1.12;
 }
 
+h2 {
+	margin: 18px 0 8px;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 32px;
+	font-weight: 500;
+	line-height: 1.12;
+}
+
+h3 {
+	margin: 0 0 6px;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 19px;
+	font-weight: 500;
+}
+
 .intro {
 	margin: 0 0 28px;
 	color: var(--muted);
@@ -69,6 +95,13 @@ form,
 
 form {
 	gap: 17px;
+}
+
+.filters {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
+	margin-bottom: 22px;
 }
 
 .field-grid {
@@ -167,6 +200,40 @@ button {
 	transition: background 140ms ease, transform 140ms ease;
 }
 
+.form-actions {
+	display: grid;
+	gap: 10px;
+}
+
+.form-actions button {
+	margin-top: 0;
+}
+
+.secondary,
+.danger {
+	min-height: 38px;
+	margin: 0;
+	padding: 0 12px;
+	border: 1px solid var(--line);
+	background: #132640;
+	color: var(--ink);
+	font-size: 12px;
+}
+
+.secondary:hover:not(:disabled) {
+	background: #1b3555;
+}
+
+.danger {
+	border-color: #754052;
+	background: #3a1d2b;
+	color: #ffc3ce;
+}
+
+.danger:hover:not(:disabled) {
+	background: #572539;
+}
+
 button:hover {
 	transform: translateY(-1px);
 	background: #347ee8;
@@ -177,9 +244,72 @@ button:focus-visible {
 	outline-offset: 3px;
 }
 
+button:disabled {
+	cursor: wait;
+	opacity: 0.65;
+}
+
 button span {
 	font-size: 20px;
 	font-weight: 400;
+}
+
+.pollution-list {
+	display: grid;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pollution-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px;
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	background: #0a1728;
+}
+
+.pollution-summary {
+	min-width: 0;
+}
+
+.pollution-summary p,
+.empty-state {
+	margin: 0;
+	color: var(--muted);
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.item-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.detail-wrap {
+	margin-top: 22px;
+}
+
+.close-detail {
+	margin-top: 12px;
+}
+
+.feedback {
+	margin: 18px 0 0;
+	padding: 12px;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.success {
+	border: 1px solid #307b65;
+	background: #12372f;
+	color: #9ce6c4;
 }
 
 @keyframes arrive {
@@ -199,7 +329,8 @@ button span {
 		padding: 24px 14px;
 	}
 
-	.form-panel {
+	.form-panel,
+	.list-panel {
 		padding: 30px 22px 28px;
 	}
 
@@ -207,8 +338,21 @@ button span {
 		font-size: 32px;
 	}
 
+	h2 {
+		font-size: 28px;
+	}
+
 	.field-grid {
 		grid-template-columns: 1fr;
+	}
+
+	.filters {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.pollution-item {
+		align-items: flex-start;
+		flex-direction: column;
 	}
 }
 

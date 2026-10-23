@@ -1,10 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { App } from './app';
+import { PollutionService } from './pollution-declaration/pollution.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        {
+          provide: PollutionService,
+          useValue: {
+            getAll: () => of([]),
+            getById: () => of({}),
+            create: () => of({}),
+            update: () => of({}),
+            delete: () => of(undefined),
+          },
+        },
+      ],
     })
       .compileComponents();
   });

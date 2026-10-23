@@ -1,10 +1,7 @@
 <main class="page">
-	@if (report; as submittedReport) {
-		<app-pollution-recap [report]="submittedReport" />
-	} @else {
-		<section class="form-panel" aria-labelledby="form-title">
+	<section class="form-panel" aria-labelledby="form-title">
 			<div class="eyebrow"><span class="eyebrow-mark"></span> Signalement citoyen</div>
-			<h1 id="form-title">Déclarer une pollution</h1>
+			<h1 id="form-title">{{ editingId === null ? 'Déclarer une pollution' : 'Modifier une pollution' }}</h1>
 			<p class="intro">Partagez les informations observées pour documenter le signalement.</p>
 
 			<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
@@ -115,8 +112,109 @@
 					}
 				</label>
 
-				<button type="submit">Déclarer <span aria-hidden="true">→</span></button>
+				<div class="form-actions">
+					<button type="submit" [disabled]="isSubmitting">
+						{{ isSubmitting ? 'Enregistrement…' : editingId === null ? 'Déclarer' : 'Enregistrer les modifications' }}
+						<span aria-hidden="true">→</span>
+					</button>
+					@if (editingId !== null) {
+						<button
+							class="secondary"
+							type="button"
+							[disabled]="isSubmitting"
+							(click)="cancelEdit()"
+						>
+							Annuler
+						</button>
+					}
+				</div>
 			</form>
-		</section>
-	}
+
+			@if (successMessage) {
+				<p class="feedback success" role="status">{{ successMessage }}</p>
+			}
+			@if (errorMessage) {
+				<p class="feedback error" role="alert">{{ errorMessage }}</p>
+			}
+	</section>
+
+	<section class="list-panel" aria-labelledby="pollutions-title">
+		<div class="eyebrow"><span class="eyebrow-mark"></span> Signalements citoyens</div>
+		<h2 id="pollutions-title">Pollutions déclarées</h2>
+		<p class="intro">Consultez, filtrez et gérez les signalements enregistrés.</p>
+
+		<div class="filters" [formGroup]="filters" aria-label="Filtres des pollutions">
+			<label class="field">
+				<span>Type</span>
+				<select formControlName="type">
+					<option value="">Tous les types</option>
+					@for (type of pollutionTypes; track type) {
+						<option [value]="type">{{ type }}</option>
+					}
+				</select>
+			</label>
+			<label class="field">
+				<span>Recherche</span>
+				<input type="search" formControlName="query" placeholder="Titre, lieu ou description" />
+			</label>
+			<label class="field">
+				<span>Observée depuis</span>
+				<input type="date" formControlName="from" />
+			</label>
+			<label class="field">
+				<span>Observée jusqu’au</span>
+				<input type="date" formControlName="to" />
+			</label>
+		</div>
+
+		@if (isLoading) {
+			<p class="intro" role="status">Chargement des pollutions…</p>
+		} @else if (filteredPollutions.length === 0) {
+			<p class="empty-state">Aucune pollution ne correspond aux filtres sélectionnés.</p>
+		} @else {
+			<ul class="pollution-list">
+				@for (pollution of filteredPollutions; track pollution.id) {
+					<li class="pollution-item">
+						<div class="pollution-summary">
+							<h3>{{ pollution.title }}</h3>
+							<p>{{ pollution.type }} · {{ pollution.location }} · {{ pollution.observedAt }}</p>
+						</div>
+						<div class="item-actions">
+							<button class="secondary" type="button" (click)="showDetails(pollution)">Détail</button>
+							<button
+								class="secondary"
+								type="button"
+								[disabled]="isSubmitting"
+								(click)="edit(pollution)"
+							>
+								Modifier
+							</button>
+							<button
+								class="danger"
+								type="button"
+								[disabled]="isDeleting === pollution.id"
+								(click)="delete(pollution)"
+							>
+								{{ isDeleting === pollution.id ? 'Suppression…' : 'Supprimer' }}
+							</button>
+						</div>
+					</li>
+				}
+			</ul>
+		}
+		@if (listSuccessMessage) {
+			<p class="feedback success" role="status">{{ listSuccessMessage }}</p>
+		}
+		@if (selectedPollution) {
+			<div class="detail-wrap">
+				<app-pollution-recap [report]="selectedPollution" />
+				<button class="secondary close-detail" type="button" (click)="closeDetails()">
+					Fermer le détail
+				</button>
+			</div>
+		}
+		@if (listErrorMessage) {
+			<p class="feedback error" role="alert">{{ listErrorMessage }}</p>
+		}
+	</section>
 </main>
