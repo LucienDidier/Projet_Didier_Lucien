@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "npm --prefix ex01 run start",
-    "mock:api": "npm --prefix ex01 run mock:api",
+    "api:dev": "npm --prefix ex01 run api:dev",
     "build": "npm --prefix ex01 run build",
     "test": "npm --prefix ex01 test"
   }

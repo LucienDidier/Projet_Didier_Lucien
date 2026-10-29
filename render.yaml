@@ -1,0 +1,54 @@
+databases:
+  - name: pollution-db
+    databaseName: pollution_db
+    user: pollution_user
+    plan: free
+    region: oregon
+
+services:
+  # -------------------------------------------------------------
+  # API Backend Node.js / Express / Sequelize / TypeScript
+  # -------------------------------------------------------------
+  - type: web
+    name: pollution-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: ex01/api
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.22.3
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pollution-db
+          property: connectionString
+      - key: FRONTEND_ORIGIN
+        value: https://pollution-front.onrender.com
+
+  # -------------------------------------------------------------
+  # Application Frontend Angular (Site Statique)
+  # -------------------------------------------------------------
+  - type: web
+    name: pollution-front
+    runtime: static
+    rootDir: ex01
+    buildCommand: npm ci && npm run build:render
+    staticPublishPath: dist/ex01/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.3
+      - key: API_HOST
+        fromService:
+          type: web
+          name: pollution-api
+          property: host
+

@@ -2,3 +2,5 @@
 /ex01/node_modules/
 /ex01/dist/ex01/
 /ex01/.angular/cache/22.2.0/ex01/
+/ex01/api/.env
+/ex01/src/environments/environment.render.ts
