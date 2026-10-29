@@ -1,10 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
 	FormControl,
 	FormGroup,
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
+import { TimeoutError } from 'rxjs';
 import { PollutionType, POLLUTION_TYPES, isPollutionType } from '../pollution-type';
 import { PollutionRecap, PollutionReport } from '../pollution-recap/pollution-recap';
 import { ErrorField } from '../shared/error-field/error-field';
@@ -97,8 +99,11 @@ type DeclarationForm = FormGroup<{
 })
 export class PollutionDeclaration implements OnInit {
 	private readonly pollutionService = inject(PollutionService);
+	private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
 	protected readonly today = localDateString(new Date());
+
+	protected readonly usesLocalStorage = this.pollutionService.usesLocalStorage;
 
 	protected readonly limits = POLLUTION_DECLARATION_LIMITS;
 
@@ -213,10 +218,12 @@ export class PollutionDeclaration implements OnInit {
 			next: (pollutions) => {
 				this.pollutions = pollutions;
 				this.isLoading = false;
+				this.changeDetectorRef.markForCheck();
 			},
 			error: () => {
 				this.listErrorMessage = 'Le chargement des pollutions a échoué. Réessayez.';
 				this.isLoading = false;
+				this.changeDetectorRef.markForCheck();
 			},
 		});
 	}
@@ -275,12 +282,16 @@ export class PollutionDeclaration implements OnInit {
 				this.editingId = null;
 				this.form.reset();
 				this.loadPollutions();
+				this.changeDetectorRef.markForCheck();
 			},
-			error: () => {
-				this.errorMessage = editingId === null
-					? 'La déclaration a échoué. Vérifiez votre connexion et réessayez.'
-					: 'La modification a échoué. Vérifiez votre connexion et réessayez.';
+			error: (error: unknown) => {
+				this.errorMessage = this.isApiUnavailable(error)
+					? 'API indisponible. Lancez l’application avec « npm start » pour démarrer aussi le serveur mock.'
+					: editingId === null
+						? 'La déclaration a échoué. Vérifiez votre connexion et réessayez.'
+						: 'La modification a échoué. Vérifiez votre connexion et réessayez.';
 				this.isSubmitting = false;
+				this.changeDetectorRef.markForCheck();
 			},
 		});
 	}
@@ -290,9 +301,11 @@ export class PollutionDeclaration implements OnInit {
 		this.pollutionService.getById(pollution.id).subscribe({
 			next: (detail) => {
 				this.selectedPollution = detail;
+				this.changeDetectorRef.markForCheck();
 			},
 			error: () => {
 				this.listErrorMessage = 'Le détail de cette pollution ne peut pas être chargé.';
+				this.changeDetectorRef.markForCheck();
 			},
 		});
 	}
@@ -343,11 +356,18 @@ export class PollutionDeclaration implements OnInit {
 				}
 				this.listSuccessMessage = 'La pollution a été supprimée.';
 				this.isDeleting = null;
+				this.changeDetectorRef.markForCheck();
 			},
 			error: () => {
 				this.listErrorMessage = 'La suppression a échoué. Réessayez.';
 				this.isDeleting = null;
+				this.changeDetectorRef.markForCheck();
 			},
 		});
+	}
+
+	private isApiUnavailable(error: unknown): boolean {
+		return error instanceof TimeoutError ||
+			(error instanceof HttpErrorResponse && error.status === 0);
 	}
 }

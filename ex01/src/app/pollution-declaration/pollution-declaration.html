@@ -132,6 +132,11 @@
 		<div class="eyebrow"><span class="eyebrow-mark"></span> Signalements citoyens</div>
 		<h2 id="pollutions-title">Pollutions déclarées</h2>
 		<p class="intro">Consultez, filtrez et gérez les signalements enregistrés.</p>
+		@if (usesLocalStorage) {
+			<p class="storage-note" role="note">
+				Mode local : les signalements sont enregistrés dans ce navigateur.
+			</p>
+		}
 
 		<div class="filters" [formGroup]="filters" aria-label="Filtres des pollutions">
 			<label class="field">
