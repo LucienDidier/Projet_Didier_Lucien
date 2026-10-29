@@ -1,3 +1,15 @@
 {
-  "pollutions": []
+  "pollutions": [
+    {
+      "title": "PollutionTest",
+      "type": "Chimique",
+      "description": "ggggggggggggggggggggggggggggggggggggggggggg",
+      "observedAt": "2025-03-04",
+      "location": "Colmar",
+      "latitude": 10,
+      "longitude": -39,
+      "photoUrl": "",
+      "id": 1
+    }
+  ]
 }

@@ -1,92 +1,8 @@
-import { $n as Output, Ac as Injector, Bt as computed, Ca as ɵɵclassProp, Cc as EventEmitter, Dn as Host, En as ElementRef, Gl as Observable, Hl as Subject, In as Input, Jl as Subscription, Kc as RuntimeError, Mr as afterNextRender, O as booleanAttribute, Pn as Inject, Qn as Optional, Qo as ɵɵlistener, Tl as signal, Ul as createOperatorSubscriber, Vl as map, Wi as setClassMetadata, Xc as Version, aa as ɵɵControlFeature, al as formatRuntimeError, ao as ɵɵdefineNgModule, bi as isSubscribable, ca as ɵɵInheritDefinitionFeature, co as ɵɵdirectiveInject, dl as inject, dr as Service, il as effect, io as ɵɵdefineDirective, ir as Renderer2, jl as ɵɵdefineInjector, jo as ɵɵgetInheritedFactory, kc as InjectionToken, la as ɵɵNgOnChangesFeature, nu as __spreadArray, ol as forwardRef, pr as SkipSelf, qn as NgModule, qt as untracked, r as ChangeDetectorRef, so as ɵɵdefineService, tn as ApplicationRef, tu as __read, ua as ɵɵProvidersFeature, ur as Self, vc as DestroyRef, wn as Directive, ya as ɵɵattribute, yi as isPromise } from "./core-DY1qa7fM.js";
-import { a as from, c as popResultSelector, r as getDOM, s as innerFrom } from "./_platform_location-chunk-DMAzVxEu.js";
-import "./common-CsdLrflz.js";
-//#region node_modules/rxjs/dist/esm5/internal/util/mapOneOrManyArgs.js
-var isArray$1 = Array.isArray;
-function callOrApply(fn, args) {
-	return isArray$1(args) ? fn.apply(void 0, __spreadArray([], __read(args))) : fn(args);
-}
-function mapOneOrManyArgs(fn) {
-	return map(function(args) {
-		return callOrApply(fn, args);
-	});
-}
-//#endregion
-//#region node_modules/rxjs/dist/esm5/internal/util/argsArgArrayOrObject.js
-var isArray = Array.isArray;
-var getPrototypeOf = Object.getPrototypeOf;
-var objectProto = Object.prototype;
-var getKeys = Object.keys;
-function argsArgArrayOrObject(args) {
-	if (args.length === 1) {
-		var first_1 = args[0];
-		if (isArray(first_1)) return {
-			args: first_1,
-			keys: null
-		};
-		if (isPOJO(first_1)) {
-			var keys = getKeys(first_1);
-			return {
-				args: keys.map(function(key) {
-					return first_1[key];
-				}),
-				keys
-			};
-		}
-	}
-	return {
-		args,
-		keys: null
-	};
-}
-function isPOJO(obj) {
-	return obj && typeof obj === "object" && getPrototypeOf(obj) === objectProto;
-}
-//#endregion
-//#region node_modules/rxjs/dist/esm5/internal/util/createObject.js
-function createObject(keys, values) {
-	return keys.reduce(function(result, key, i) {
-		return result[key] = values[i], result;
-	}, {});
-}
-//#endregion
-//#region node_modules/rxjs/dist/esm5/internal/observable/forkJoin.js
-function forkJoin() {
-	var args = [];
-	for (var _i = 0; _i < arguments.length; _i++) args[_i] = arguments[_i];
-	var resultSelector = popResultSelector(args);
-	var _a = argsArgArrayOrObject(args), sources = _a.args, keys = _a.keys;
-	var result = new Observable(function(subscriber) {
-		var length = sources.length;
-		if (!length) {
-			subscriber.complete();
-			return;
-		}
-		var values = new Array(length);
-		var remainingCompletions = length;
-		var remainingEmissions = length;
-		var _loop_1 = function(sourceIndex) {
-			var hasValue = false;
-			innerFrom(sources[sourceIndex]).subscribe(createOperatorSubscriber(subscriber, function(value) {
-				if (!hasValue) {
-					hasValue = true;
-					remainingEmissions--;
-				}
-				values[sourceIndex] = value;
-			}, function() {
-				return remainingCompletions--;
-			}, void 0, function() {
-				if (!remainingCompletions || !hasValue) {
-					if (!remainingEmissions) subscriber.next(keys ? createObject(keys, values) : values);
-					subscriber.complete();
-				}
-			}));
-		};
-		for (var sourceIndex = 0; sourceIndex < length; sourceIndex++) _loop_1(sourceIndex);
-	});
-	return resultSelector ? result.pipe(mapOneOrManyArgs(resultSelector)) : result;
-}
-//#endregion
+import { Cr as inject, D as DestroyRef, Hi as signal, I as EventEmitter, Nn as formatRuntimeError, Pn as forwardRef, U as InjectionToken, W as Injector, _ as untracked, bn as effect, c as computed, la as ɵɵdefineInjector, lt as RuntimeError, mt as Version } from "./_resource-chunk-D_YzcRAE.js";
+import { $n as SkipSelf, Ai as setClassMetadata, Ga as ɵɵdefineNgModule, Gi as ɵɵControlFeature, Ja as ɵɵdirectiveInject, Ji as ɵɵInheritDefinitionFeature, Nn as NgModule, O as booleanAttribute, Rn as Optional, Ro as ɵɵlistener, Sn as Input, Vt as ApplicationRef, Wa as ɵɵdefineDirective, Wn as Renderer2, Xi as ɵɵProvidersFeature, Xn as Self, Yi as ɵɵNgOnChangesFeature, Zn as Service, _o as ɵɵgetInheritedFactory, aa as ɵɵattribute, ai as isPromise, bn as Inject, fn as ElementRef, la as ɵɵclassProp, oi as isSubscribable, pn as Host, qa as ɵɵdefineService, r as ChangeDetectorRef, un as Directive, vr as afterNextRender, zn as Output } from "./core-Chl50vpr.js";
+import { Mn as from, Qn as Subject, cn as forkJoin, ur as Subscription, vn as map } from "./esm5-DYNb5pjm.js";
+import { r as getDOM } from "./_platform_location-chunk-DS2LjAiV.js";
+import "./common-1dvL0tkP.js";
 //#region node_modules/@angular/forms/fesm2022/forms.mjs
 /**
 * @license Angular v22.2.1
@@ -526,7 +442,8 @@ function composeAsync(validators) {
 	const presentValidators = validators.filter(isPresent);
 	if (presentValidators.length == 0) return null;
 	return function(control) {
-		return forkJoin(executeValidators(control, presentValidators).map(toObservable)).pipe(map(mergeErrors));
+		const observables = executeValidators(control, presentValidators).map(toObservable);
+		return forkJoin(observables).pipe(map(mergeErrors));
 	};
 }
 function composeAsyncValidators(validators) {
