@@ -7,18 +7,14 @@
 			<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
 				<label class="field">
 					<span>Titre de la pollution</span>
-					<input id="title" type="text" formControlName="title" autocomplete="off" maxlength="120" />
-					@if (form.controls.title.touched && form.controls.title.hasError('required')) {
-						<small class="error">Le titre est requis.</small>
-					} @else if (form.controls.title.touched && form.controls.title.hasError('blank')) {
-						<small class="error">Le titre ne peut pas contenir uniquement des espaces.</small>
-					} @else if (form.controls.title.touched && form.controls.title.hasError('minlength')) {
-						<small class="error">Le titre doit contenir au moins 5 caractères.</small>
-					} @else if (form.controls.title.touched && form.controls.title.hasError('maxlength')) {
-						<small class="error">Le titre ne peut pas dépasser 120 caractères.</small>
-					} @else if (form.controls.title.touched && form.controls.title.hasError('pattern')) {
-						<small class="error">Le titre contient des caractères non autorisés.</small>
-					}
+					<input
+						id="title"
+						type="text"
+						formControlName="title"
+						autocomplete="off"
+						[maxlength]="limits.title.maxLength"
+					/>
+					<app-error-field [control]="form.controls.title" [messages]="errorMessages.title" />
 				</label>
 
 				<div class="field-grid">
@@ -30,86 +26,80 @@
 								<option [value]="type">{{ type }}</option>
 							}
 						</select>
-						@if (form.controls.type.touched && form.controls.type.invalid) {
-							<small class="error">Sélectionnez un type de pollution.</small>
-						}
+						<app-error-field [control]="form.controls.type" [messages]="errorMessages.type" />
 					</label>
 
 					<label class="field">
 						<span>Date de l’observation</span>
 						<input id="observedAt" type="date" formControlName="observedAt" [max]="today" />
-						@if (form.controls.observedAt.touched && form.controls.observedAt.hasError('required')) {
-							<small class="error">La date est requise.</small>
-						} @else if (form.controls.observedAt.touched && form.controls.observedAt.hasError('invalidDate')) {
-							<small class="error">Saisissez une date valide.</small>
-						} @else if (form.controls.observedAt.touched && form.controls.observedAt.hasError('futureDate')) {
-							<small class="error">La date de l’observation ne peut pas être dans le futur.</small>
-						}
+						<app-error-field [control]="form.controls.observedAt" [messages]="errorMessages.observedAt" />
 					</label>
 				</div>
 
 				<label class="field">
 					<span>Description</span>
-					<textarea id="description" formControlName="description" rows="4" maxlength="2000"></textarea>
-					@if (form.controls.description.touched && form.controls.description.hasError('required')) {
-						<small class="error">La description est requise.</small>
-					} @else if (form.controls.description.touched && form.controls.description.hasError('blank')) {
-						<small class="error">La description ne peut pas contenir uniquement des espaces.</small>
-					} @else if (form.controls.description.touched && form.controls.description.hasError('minlength')) {
-						<small class="error">La description doit contenir au moins 20 caractères.</small>
-					} @else if (form.controls.description.touched && form.controls.description.hasError('maxlength')) {
-						<small class="error">La description ne peut pas dépasser 2 000 caractères.</small>
-					}
+					<textarea
+						id="description"
+						formControlName="description"
+						rows="4"
+						[maxlength]="limits.description.maxLength"
+					></textarea>
+					<app-error-field
+						[control]="form.controls.description"
+						[messages]="errorMessages.description"
+					/>
 				</label>
 
 				<label class="field">
 					<span>Lieu</span>
-					<input id="location" type="text" formControlName="location" autocomplete="street-address" maxlength="200" />
-					@if (form.controls.location.touched && form.controls.location.hasError('required')) {
-						<small class="error">Le lieu est requis.</small>
-					} @else if (form.controls.location.touched && form.controls.location.hasError('blank')) {
-						<small class="error">Le lieu ne peut pas contenir uniquement des espaces.</small>
-					} @else if (form.controls.location.touched && form.controls.location.hasError('minlength')) {
-						<small class="error">Le lieu doit contenir au moins 3 caractères.</small>
-					} @else if (form.controls.location.touched && form.controls.location.hasError('maxlength')) {
-						<small class="error">Le lieu ne peut pas dépasser 200 caractères.</small>
-					} @else if (form.controls.location.touched && form.controls.location.hasError('pattern')) {
-						<small class="error">Le lieu contient des caractères non autorisés.</small>
-					} @else if (form.controls.location.touched && form.controls.location.hasError('missingLetter')) {
-						<small class="error">Le lieu doit contenir au moins une lettre.</small>
-					}
+					<input
+						id="location"
+						type="text"
+						formControlName="location"
+						autocomplete="street-address"
+						[maxlength]="limits.location.maxLength"
+					/>
+					<app-error-field [control]="form.controls.location" [messages]="errorMessages.location" />
 				</label>
 
 				<div class="field-grid">
 					<label class="field">
 						<span>Latitude</span>
-						<input id="latitude" type="number" formControlName="latitude" min="-90" max="90" step="any" />
-						@if (form.controls.latitude.touched && form.controls.latitude.hasError('required')) {
-							<small class="error">La latitude est requise.</small>
-						} @else if (form.controls.latitude.touched && form.controls.latitude.invalid) {
-							<small class="error">La latitude doit être comprise entre -90 et 90.</small>
-						}
+						<input
+							id="latitude"
+							type="number"
+							formControlName="latitude"
+							[min]="limits.latitude.minimum"
+							[max]="limits.latitude.maximum"
+							step="any"
+						/>
+						<app-error-field [control]="form.controls.latitude" [messages]="errorMessages.latitude" />
 					</label>
 
 					<label class="field">
 						<span>Longitude</span>
-						<input id="longitude" type="number" formControlName="longitude" min="-180" max="180" step="any" />
-						@if (form.controls.longitude.touched && form.controls.longitude.hasError('required')) {
-							<small class="error">La longitude est requise.</small>
-						} @else if (form.controls.longitude.touched && form.controls.longitude.invalid) {
-							<small class="error">La longitude doit être comprise entre -180 et 180.</small>
-						}
+						<input
+							id="longitude"
+							type="number"
+							formControlName="longitude"
+							[min]="limits.longitude.minimum"
+							[max]="limits.longitude.maximum"
+							step="any"
+						/>
+						<app-error-field [control]="form.controls.longitude" [messages]="errorMessages.longitude" />
 					</label>
 				</div>
 
 				<label class="field">
 					<span>Photo (URL) <span class="optional">Optionnel</span></span>
-					<input id="photoUrl" type="url" formControlName="photoUrl" placeholder="https://…" />
-					@if (form.controls.photoUrl.touched && form.controls.photoUrl.hasError('maxlength')) {
-						<small class="error">L’URL ne peut pas dépasser 2 048 caractères.</small>
-					} @else if (form.controls.photoUrl.touched && form.controls.photoUrl.hasError('invalidUrl')) {
-						<small class="error">Saisissez une URL HTTP ou HTTPS valide, sans espace.</small>
-					}
+					<input
+						id="photoUrl"
+						type="url"
+						formControlName="photoUrl"
+						placeholder="https://…"
+						[maxlength]="limits.photoUrl.maxLength"
+					/>
+					<app-error-field [control]="form.controls.photoUrl" [messages]="errorMessages.photoUrl" />
 				</label>
 
 				<div class="form-actions">

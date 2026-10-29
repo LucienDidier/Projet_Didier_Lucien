@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '../../environments/environment';
+import { PollutionReport } from '../pollution-recap/pollution-recap';
 import { PollutionService } from './pollution.service';
 
 describe('PollutionService', () => {
@@ -22,7 +23,7 @@ describe('PollutionService', () => {
 
 	it('exposes all CRUD operations on the configured pollutions endpoint', () => {
 		const url = `${environment.apiUrl}/pollutions`;
-		const pollution = {
+		const pollution: PollutionReport = {
 			title: 'Déchets près de la rivière',
 			type: 'Plastique',
 			description: 'Des déchets sont accumulés près de la rivière.',

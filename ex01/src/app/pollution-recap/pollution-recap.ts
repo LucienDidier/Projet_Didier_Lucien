@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { PollutionType } from '../pollution-type';
 
 export interface PollutionReport {
 	title: string;
-	type: string;
+	type: PollutionType;
 	description: string;
 	observedAt: string;
 	location: string;
