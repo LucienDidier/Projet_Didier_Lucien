@@ -137,6 +137,18 @@ button:focus-visible {
 	font-size: 13px;
 }
 
+.user-summary {
+	margin-top: 24px;
+	padding-top: 16px;
+	border-top: 1px solid var(--line);
+	color: var(--muted);
+	font-size: 13px;
+}
+
+.user-summary p {
+	margin: 0;
+}
+
 .success {
 	border: 1px solid #307b65;
 	background: #12372f;

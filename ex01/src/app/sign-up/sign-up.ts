@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
 	FormControl,
 	FormGroup,
@@ -7,7 +8,7 @@ import {
 } from '@angular/forms';
 import { ErrorField } from '../shared/error-field/error-field';
 import { minTrimmedLength, notBlank, validEmail, validPersonName } from '../validators';
-import { SignUpService } from './sign-up.service';
+import { UserService } from './user.service';
 
 const STRONG_PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z\s]).+$/;
 
@@ -45,8 +46,8 @@ type SignUpForm = FormGroup<{
 	styleUrl: './sign-up.scss',
 	templateUrl: './sign-up.html',
 })
-export class SignUp {
-	private readonly signUpService = inject(SignUpService);
+export class SignUp implements OnInit {
+	private readonly userService = inject(UserService);
 
 	protected readonly errorMessages = SIGN_UP_ERROR_MESSAGES;
 
@@ -82,8 +83,15 @@ export class SignUp {
 	});
 
 	protected isSubmitting = false;
+	protected isLoadingUsers = false;
 	protected successMessage = '';
 	protected errorMessage = '';
+	protected usersErrorMessage = '';
+	protected userCount = 0;
+
+	ngOnInit(): void {
+		this.loadUsers();
+	}
 
 	protected submit(): void {
 		if (this.form.invalid || this.isSubmitting) {
@@ -99,17 +107,34 @@ export class SignUp {
 		request.name = request.name.trim();
 		request.email = request.email.trim();
 
-		this.signUpService.signUp(request).subscribe({
+		this.userService.create(request).subscribe({
 			next: (response) => {
 				this.successMessage =
 					response?.message || 'Votre compte a été créé avec succès.';
 				this.form.reset();
 				this.isSubmitting = false;
+				this.loadUsers();
+			},
+			error: (error: unknown) => {
+				this.errorMessage = error instanceof HttpErrorResponse && error.status === 409
+					? 'Cette adresse e-mail est déjà utilisée.'
+					: "L'inscription a échoué. Vérifiez que l’API est disponible, puis réessayez.";
+				this.isSubmitting = false;
+			},
+		});
+	}
+
+	private loadUsers(): void {
+		this.isLoadingUsers = true;
+		this.usersErrorMessage = '';
+		this.userService.getAll().subscribe({
+			next: (users) => {
+				this.userCount = users.length;
+				this.isLoadingUsers = false;
 			},
 			error: () => {
-				this.errorMessage =
-					"L'inscription a échoué. Vérifiez votre connexion et réessayez.";
-				this.isSubmitting = false;
+				this.usersErrorMessage = 'La liste des utilisateurs ne peut pas être chargée.';
+				this.isLoadingUsers = false;
 			},
 		});
 	}

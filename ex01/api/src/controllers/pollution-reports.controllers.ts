@@ -3,6 +3,7 @@ import db from "../models";
 import {
   POLLUTION_TYPES,
   PollutionReportAttributes,
+  PollutionReportInstance,
   PollutionType
 } from "../models/pollution-reports.model";
 
@@ -56,16 +57,20 @@ export const create = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const update = async (req: Request, res: Response): Promise<void> => {
+export const update = (req: Request, res: Response): Promise<void> =>
+  updateReport(req, res, false);
+
+export const patch = (req: Request, res: Response): Promise<void> =>
+  updateReport(req, res, true);
+
+async function updateReport(
+  req: Request,
+  res: Response,
+  partial: boolean
+): Promise<void> {
   const id = parseId(req.params.id);
   if (id === null) {
     res.status(400).json({ message: "Pollution id must be a positive integer." });
-    return;
-  }
-
-  const report = parseReport(req.body);
-  if (!report) {
-    res.status(400).json({ message: "Pollution report data is invalid." });
     return;
   }
 
@@ -76,13 +81,21 @@ export const update = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const report = partial
+      ? parsePatch(existing, req.body)
+      : parseReport(req.body);
+    if (!report) {
+      res.status(400).json({ message: "Pollution report data is invalid." });
+      return;
+    }
+
     await existing.update(report);
     res.status(200).json(existing);
   } catch (error: unknown) {
     console.error(`Failed to update pollution report ${id}:`, error);
     res.status(500).json({ message: "Failed to update pollution report." });
   }
-};
+}
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const id = parseId(req.params.id);
@@ -111,13 +124,12 @@ function parseId(value: string | string[] | undefined): number | null {
 }
 
 function parseReport(value: unknown): PollutionReportInput | null {
-  if (typeof value !== "object" || value === null) {
+  if (!isRecord(value)) {
     return null;
   }
 
-  const report = value as Record<string, unknown>;
-  const { title, type, description, observedAt, location, latitude, longitude } = report;
-  const photoUrl = report["photoUrl"] ?? "";
+  const { title, type, description, observedAt, location, latitude, longitude } = value;
+  const photoUrl = value["photoUrl"] ?? "";
 
   if (
     typeof title !== "string" ||
@@ -161,6 +173,21 @@ function parseReport(value: unknown): PollutionReportInput | null {
   };
 }
 
+function parsePatch(
+  existing: PollutionReportInstance,
+  value: unknown
+): PollutionReportInput | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  return parseReport({ ...existing.get({ plain: true }), ...value });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function isPollutionType(value: string): value is PollutionType {
   return POLLUTION_TYPES.some((type) => type === value);
 }
@@ -197,4 +224,4 @@ function isValidPhotoUrl(value: string): boolean {
   }
 }
 
-export default { getAll, getById, create, update, remove };
+export default { getAll, getById, create, update, patch, remove };

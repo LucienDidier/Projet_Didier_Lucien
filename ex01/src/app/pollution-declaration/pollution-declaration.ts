@@ -1,12 +1,10 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import {
 	FormControl,
 	FormGroup,
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
-import { TimeoutError } from 'rxjs';
 import { PollutionType, POLLUTION_TYPES, isPollutionType } from '../pollution-type';
 import { PollutionRecap, PollutionReport } from '../pollution-recap/pollution-recap';
 import { ErrorField } from '../shared/error-field/error-field';
@@ -102,8 +100,6 @@ export class PollutionDeclaration implements OnInit {
 	private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
 	protected readonly today = localDateString(new Date());
-
-	protected readonly usesLocalStorage = this.pollutionService.usesLocalStorage;
 
 	protected readonly limits = POLLUTION_DECLARATION_LIMITS;
 
@@ -284,12 +280,10 @@ export class PollutionDeclaration implements OnInit {
 				this.loadPollutions();
 				this.changeDetectorRef.markForCheck();
 			},
-			error: (error: unknown) => {
-				this.errorMessage = this.isApiUnavailable(error)
-					? 'API indisponible. Lancez l’application avec « npm start » pour démarrer aussi le serveur mock.'
-					: editingId === null
-						? 'La déclaration a échoué. Vérifiez votre connexion et réessayez.'
-						: 'La modification a échoué. Vérifiez votre connexion et réessayez.';
+			error: () => {
+				this.errorMessage = editingId === null
+					? 'La déclaration a échoué. Vérifiez que l’API est disponible, puis réessayez.'
+					: 'La modification a échoué. Vérifiez que l’API est disponible, puis réessayez.';
 				this.isSubmitting = false;
 				this.changeDetectorRef.markForCheck();
 			},
@@ -366,8 +360,4 @@ export class PollutionDeclaration implements OnInit {
 		});
 	}
 
-	private isApiUnavailable(error: unknown): boolean {
-		return error instanceof TimeoutError ||
-			(error instanceof HttpErrorResponse && error.status === 0);
-	}
 }

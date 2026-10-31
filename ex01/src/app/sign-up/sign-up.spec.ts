@@ -1,18 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { SignUpService } from './sign-up.service';
+import { UserService } from './user.service';
 import { SignUp } from './sign-up';
 
 describe('SignUp', () => {
-	const signUpService = {
-		signUp: vi.fn(() => of({})),
+	const userService = {
+		create: vi.fn(() => of({})),
+		getAll: vi.fn(() => of([])),
 	};
 
 	beforeEach(async () => {
-		signUpService.signUp.mockClear();
+		userService.create.mockClear();
+		userService.getAll.mockClear();
 		await TestBed.configureTestingModule({
 			imports: [SignUp],
-			providers: [{ provide: SignUpService, useValue: signUpService }],
+			providers: [{ provide: UserService, useValue: userService }],
 		}).compileComponents();
 	});
 
@@ -38,7 +40,7 @@ describe('SignUp', () => {
 
 		expect(element.textContent).toContain('sans chiffres');
 		expect(element.textContent).toContain('caractère spécial');
-		expect(signUpService.signUp).not.toHaveBeenCalled();
+		expect(userService.create).not.toHaveBeenCalled();
 	});
 
 	it('trims the name and email before calling the service', () => {
@@ -61,11 +63,12 @@ describe('SignUp', () => {
 		element.querySelector('form')!.dispatchEvent(new Event('submit'));
 		fixture.detectChanges();
 
-		expect(signUpService.signUp).toHaveBeenCalledWith({
+		expect(userService.create).toHaveBeenCalledWith({
 			name: 'Lucie Didier',
 			email: 'lucie@example.com',
 			password: 'StrongPass1!',
 		});
+		expect(userService.getAll).toHaveBeenCalled();
 		expect(element.textContent).toContain('compte a été créé');
 	});
 });

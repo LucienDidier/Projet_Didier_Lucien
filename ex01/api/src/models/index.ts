@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import { BDD } from "../config";
 import definePollutions, { PollutionModel } from "./pollutions.model";
 import definePollutionReports, { PollutionReportInstance } from "./pollution-reports.model";
+import defineUsers, { UserInstance } from "./users.model";
 
 const connectionUrl =
   process.env.DATABASE_URL ||
@@ -33,13 +34,15 @@ export interface Database {
   sequelize: Sequelize;
   pollutions: PollutionModel;
   pollutionReports: ReturnType<typeof definePollutionReports>;
+  users: ReturnType<typeof defineUsers>;
 }
 
 export const db: Database = {
   Sequelize,
   sequelize,
   pollutions: definePollutions(sequelize, Sequelize),
-  pollutionReports: definePollutionReports(sequelize)
+  pollutionReports: definePollutionReports(sequelize),
+  users: defineUsers(sequelize)
 };
 
 export default db;

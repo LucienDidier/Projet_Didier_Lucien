@@ -13,6 +13,7 @@ export default (app: Application): void => {
   reportsRouter.get("/:id", pollutionReportsController.getById);
   reportsRouter.post("/", pollutionReportsController.create);
   reportsRouter.put("/:id", pollutionReportsController.update);
+  reportsRouter.patch("/:id", pollutionReportsController.patch);
   reportsRouter.delete("/:id", pollutionReportsController.remove);
 
   app.use("/api/pollutions", reportsRouter);

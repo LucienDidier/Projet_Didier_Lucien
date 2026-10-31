@@ -52,5 +52,14 @@
 		@if (errorMessage) {
 			<p class="feedback error" role="alert">{{ errorMessage }}</p>
 		}
+		<section class="user-summary" aria-live="polite" aria-label="Utilisateurs inscrits">
+			@if (isLoadingUsers) {
+				<p>Chargement des utilisateurs…</p>
+			} @else if (usersErrorMessage) {
+				<p class="error" role="alert">{{ usersErrorMessage }}</p>
+			} @else {
+				<p>{{ userCount }} utilisateur{{ userCount > 1 ? 's' : '' }} inscrit{{ userCount > 1 ? 's' : '' }}.</p>
+			}
+		</section>
 	</section>
 </div>

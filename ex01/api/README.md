@@ -1,11 +1,21 @@
 # Pollution API
 
-The API uses PostgreSQL and exposes the pollution reports consumed by the Angular app:
+The API uses PostgreSQL and exposes the endpoints consumed by the Angular app.
+
+## Users
+
+- `GET /api/users` — list users (`id`, `name`, and `email`)
+- `POST /api/users` — create a user with `name`, `email`, and `password`
+
+Passwords are stored as scrypt-derived hashes and are never included in API responses.
+
+## Pollution reports
 
 - `GET /api/pollutions`
 - `GET /api/pollutions/:id`
 - `POST /api/pollutions`
 - `PUT /api/pollutions/:id`
+- `PATCH /api/pollutions/:id`
 - `DELETE /api/pollutions/:id`
 
 The older pollution-measurement endpoints remain available under `/api/pollution`.
