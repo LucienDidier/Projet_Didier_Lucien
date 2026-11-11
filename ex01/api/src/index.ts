@@ -7,9 +7,13 @@ import initRoutes from "./routes";
 const app: Application = express();
 
 const frontendOrigin = process.env.FRONTEND_ORIGIN;
+const localDevelopmentOrigins = [
+  "http://localhost:4200",
+  "http://127.0.0.1:4200"
+];
 const corsOptions: CorsOptions = {
   origin: frontendOrigin
-    ? [frontendOrigin, `https://${frontendOrigin}`]
+    ? [frontendOrigin, `https://${frontendOrigin}`, ...localDevelopmentOrigins]
     : "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: "Content-Type, Authorization",

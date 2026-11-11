@@ -8,7 +8,7 @@ export interface Pollution extends PollutionReport {
 	id: number | string;
 }
 
-const API_REQUEST_TIMEOUT_MS = 5000;
+const API_REQUEST_TIMEOUT_MS = 60_000;
 
 @Injectable({ providedIn: 'root' })
 export class PollutionService {

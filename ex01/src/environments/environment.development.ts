@@ -1,4 +1,4 @@
 export const environment = {
-	apiUrl: 'http://localhost:3000/api',
+	apiUrl: 'https://pollution-api-9dwl.onrender.com/api',
 	production: false,
 } as const;
