@@ -1,0 +1,42 @@
+<section class="recap-panel" aria-labelledby="recap-title">
+	<div class="eyebrow"><span class="eyebrow-mark"></span> Signalement enregistré</div>
+	<h1 id="recap-title">Récapitulatif</h1>
+	<p class="intro">Les informations de votre déclaration sont prêtes à être transmises.</p>
+
+	<dl class="report-details">
+		<div class="detail">
+			<dt>Titre</dt>
+			<dd>{{ report.title }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Type de pollution</dt>
+			<dd>{{ report.type }}</dd>
+		</div>
+		<div class="detail detail-wide">
+			<dt>Description</dt>
+			<dd class="preserve-lines">{{ report.description }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Date de l’observation</dt>
+			<dd>{{ report.observedAt }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Lieu</dt>
+			<dd>{{ report.location }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Latitude</dt>
+			<dd>{{ report.latitude }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Longitude</dt>
+			<dd>{{ report.longitude }}</dd>
+		</div>
+		@if (report.photoUrl) {
+			<div class="detail detail-wide">
+				<dt>Photo</dt>
+				<dd><img class="report-photo" [src]="report.photoUrl" [alt]="'Photo du signalement : ' + report.title" /></dd>
+			</div>
+		}
+	</dl>
+</section>
