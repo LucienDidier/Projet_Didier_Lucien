@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { HighlightPollutionDirective } from '../shared/highlight-pollution.directive';
+import { PollutionLevelPipe } from '../shared/pollution-level.pipe';
 import { PollutionType } from '../pollution-type';
 
 export interface PollutionReport {
@@ -6,6 +8,7 @@ export interface PollutionReport {
 	type: PollutionType;
 	description: string;
 	observedAt: string;
+	dangerLevel: number;
 	location: string;
 	latitude: number;
 	longitude: number;
@@ -13,6 +16,7 @@ export interface PollutionReport {
 }
 
 @Component({
+	imports: [HighlightPollutionDirective, PollutionLevelPipe],
 	selector: 'app-pollution-recap',
 	styleUrl: './pollution-recap.scss',
 	templateUrl: './pollution-recap.html',

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { Application, Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
+import { DataTypes } from "sequelize";
 import db from "./models";
 import initRoutes from "./routes";
 
@@ -41,6 +42,18 @@ initRoutes(app);
 
 async function startServer(): Promise<void> {
   await db.sequelize.sync();
+  const reportColumns = await db.sequelize
+    .getQueryInterface()
+    .describeTable("pollution_reports");
+  if (!("dangerLevel" in reportColumns)) {
+    await db.sequelize
+      .getQueryInterface()
+      .addColumn("pollution_reports", "dangerLevel", {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        defaultValue: 0
+      });
+  }
   console.log("Synced db.");
 
   const count = await db.pollutions.count();

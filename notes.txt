@@ -1,0 +1,79 @@
+## Fichiers concernés
+
+Petite précision sur l’état actuel : **les changements encore visibles dans `git diff` ne concernent que trois fichiers** — le reste de l’implémentation décrite ci-dessous est déjà présent dans le projet, mais n’apparaît plus comme modification non commitée.
+
+### API utilisateurs
+
+- `users.routes.ts` déclare `GET /api/users` et `POST /api/users`.
+- `routes/index.ts` enregistre ces routes dans Express.
+- `users.controllers.ts` contient le traitement des requêtes : validation, lecture, création, réponses HTTP et gestion des erreurs.
+- `users.model.ts` définit la table `users`.
+- `models/index.ts` initialise et expose ce modèle à l’API.
+
+### Application Angular et utilisateurs
+
+- `user.service.ts` envoie les requêtes HTTP pour lister et créer des utilisateurs.
+- `user.ts` définit les types de données utilisateur.
+- `sign-up.ts` valide le formulaire, appelle le service et recharge le nombre d’inscrits après une création.
+- `sign-up.html` affiche le formulaire, les messages d’état et le compteur.
+- `sign-up.scss` met en forme ces éléments.
+- `sign-up.spec.ts` teste le comportement du formulaire.
+- `user.service.spec.ts` vérifie les requêtes HTTP du service.
+
+### Pollutions
+
+- `pollution.service.ts` contient les appels API pour lister, consulter, créer, modifier et supprimer une pollution.
+- `pollution-declaration.ts` relie ces appels au formulaire et à la liste affichée.
+- `pollution-declaration.html` affiche le formulaire, les filtres et les signalements.
+- `pollution-declaration.scss` contient leur style.
+- `pollution.routes.ts` distingue les anciennes routes `/api/pollution` des routes actuelles `/api/pollutions`.
+- `pollution-reports.controllers.ts` traite les opérations sur les signalements.
+- `pollution.service.spec.ts` teste les méthodes HTTP du service.
+
+### Configuration et documentation
+
+- `environment.development.ts` utilise l’API locale `http://localhost:3000/api`.
+- `environment.ts` configure l’URL `/api` utilisée par défaut.
+- `write-render-environment.mjs` génère l’adresse de l’API pour le déploiement.
+- `README.md` documente les routes et le démarrage de l’API.
+
+## Ce que fait le code, concrètement
+
+### 1. Création et liste des utilisateurs
+
+Le routeur `users.routes.ts` associe :
+
+- `GET /api/users` à `getAll` dans le contrôleur. Le contrôleur demande les utilisateurs à la base, dans l’ordre des identifiants, et ne renvoie que `id`, `name` et `email`.
+- `POST /api/users` à `create`. Cette méthode vérifie le contenu reçu, crée un sel aléatoire, calcule un hash `scrypt` du mot de passe, puis enregistre l’utilisateur. Le mot de passe brut et son hash ne sont pas inclus dans la réponse.
+
+Les données sont définies dans `users.model.ts` : identifiant généré automatiquement, nom, adresse e-mail unique et hash du mot de passe. Si l’adresse existe déjà, l’API renvoie une erreur `409`; si le contenu soumis ne respecte pas les validations, elle renvoie `400`.
+
+### 2. Appels utilisateurs dans l’interface
+
+Dans `user.service.ts`, `getAll()` appelle l’API en `GET` et `create()` l’appelle en `POST`.
+
+Le composant `sign-up.ts` appelle `getAll()` au chargement pour afficher **le nombre d’utilisateurs**. Après une inscription réussie, il rappelle l’API pour actualiser ce nombre. Le compteur ne montre pas la liste des noms ou des adresses.
+
+### 3. Opérations sur les pollutions
+
+Dans `pollution.service.ts`, les méthodes correspondent aux requêtes suivantes :
+
+| Méthode du service | Requête API | Rôle |
+|---|---|---|
+| `getAll()` | `GET /api/pollutions` | Récupérer les signalements |
+| `getById(id)` | `GET /api/pollutions/:id` | Récupérer le détail d’un signalement |
+| `create(data)` | `POST /api/pollutions` | Créer un signalement |
+| `update(id, data)` | `PUT /api/pollutions/:id` | Remplacer/modifier un signalement |
+| `delete(id)` | `DELETE /api/pollutions/:id` | Supprimer un signalement |
+
+Le composant `pollution-declaration.ts` appelle ces méthodes selon l’action de l’utilisateur, puis recharge ou actualise l’affichage. Le service utilise maintenant uniquement l’API : il n’y a plus de branche de stockage local.
+
+À noter : le routeur conserve aussi `PATCH /api/pollutions/:id`, en plus du `PUT` demandé. La modification depuis le service Angular utilise bien `PUT`.
+
+## Changements encore non commités
+
+D’après l’état Git actuel, seuls ces changements restent dans le diff :
+
+- `package-lock.json` à la racine est supprimé : il était vide et les dépendances sont verrouillées séparément dans le frontend et l’API.
+- `db.json` est supprimé : ce fichier contenait des données locales et n’est plus utilisé par l’application reliée à l’API.
+- `write-render-environment.mjs` ne génère plus l’ancienne option `pollutionStorage`, car le stockage local a été retiré.

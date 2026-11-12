@@ -17,6 +17,7 @@ export interface PollutionReportAttributes {
   type: PollutionType;
   description: string;
   observedAt: string;
+  dangerLevel: number;
   location: string;
   latitude: number;
   longitude: number;
@@ -55,6 +56,11 @@ export default function definePollutionReports(sequelize: Sequelize) {
       observedAt: {
         type: DataTypes.DATEONLY,
         allowNull: false
+      },
+      dangerLevel: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        defaultValue: 0
       },
       location: {
         type: DataTypes.STRING(200),

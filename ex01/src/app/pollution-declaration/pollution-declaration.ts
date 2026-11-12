@@ -23,6 +23,7 @@ import { Pollution, PollutionService } from './pollution.service';
 const POLLUTION_DECLARATION_LIMITS = {
 	title: { minLength: 5, maxLength: 120 },
 	description: { minLength: 20, maxLength: 2000 },
+	dangerLevel: { minimum: 0 },
 	location: { minLength: 3, maxLength: 200 },
 	photoUrl: { maxLength: 2048 },
 	latitude: { minimum: -90, maximum: 90 },
@@ -51,6 +52,11 @@ const DECLARATION_ERROR_MESSAGES = {
 		blank: 'La description ne peut pas contenir uniquement des espaces.',
 		minlength: `La description doit contenir au moins ${POLLUTION_DECLARATION_LIMITS.description.minLength} caractères.`,
 		maxlength: `La description ne peut pas dépasser ${POLLUTION_DECLARATION_LIMITS.description.maxLength.toLocaleString('fr-FR')} caractères.`,
+	},
+	dangerLevel: {
+		required: 'Le niveau de dangerosité est requis.',
+		invalidNumber: 'Le niveau de dangerosité doit être un nombre valide.',
+		min: 'Le niveau de dangerosité doit être supérieur ou égal à 0.',
 	},
 	location: {
 		required: 'Le lieu est requis.',
@@ -83,6 +89,7 @@ type DeclarationForm = FormGroup<{
 	type: FormControl<PollutionType | ''>;
 	description: FormControl<string>;
 	observedAt: FormControl<string>;
+	dangerLevel: FormControl<number | null>;
 	location: FormControl<string>;
 	latitude: FormControl<number | null>;
 	longitude: FormControl<number | null>;
@@ -138,6 +145,11 @@ export class PollutionDeclaration implements OnInit {
 				Validators.maxLength(POLLUTION_DECLARATION_LIMITS.description.maxLength),
 			],
 		}),
+		dangerLevel: new FormControl<number | null>(null, [
+			Validators.required,
+			finiteNumber,
+			Validators.min(POLLUTION_DECLARATION_LIMITS.dangerLevel.minimum),
+		]),
 		observedAt: new FormControl('', {
 			nonNullable: true,
 			validators: [Validators.required, validDateNotInFuture],
@@ -237,6 +249,7 @@ export class PollutionDeclaration implements OnInit {
 		const pollutionType = value.type;
 		const latitude = value.latitude;
 		const longitude = value.longitude;
+		const dangerLevel = value.dangerLevel;
 		if (!isPollutionType(pollutionType)) {
 			this.form.controls.type.setErrors({ invalidType: true });
 			this.form.markAllAsTouched();
@@ -252,6 +265,15 @@ export class PollutionDeclaration implements OnInit {
 			this.form.markAllAsTouched();
 			return;
 		}
+		if (
+			typeof dangerLevel !== 'number' ||
+			!Number.isFinite(dangerLevel) ||
+			dangerLevel < POLLUTION_DECLARATION_LIMITS.dangerLevel.minimum
+		) {
+			this.form.controls.dangerLevel.setErrors({ invalidNumber: true });
+			this.form.markAllAsTouched();
+			return;
+		}
 
 		this.isSubmitting = true;
 		value.title = value.title.trim();
@@ -260,6 +282,7 @@ export class PollutionDeclaration implements OnInit {
 		const report: PollutionReport = {
 			...value,
 			type: pollutionType,
+			dangerLevel,
 			latitude,
 			longitude,
 		};
@@ -319,6 +342,7 @@ export class PollutionDeclaration implements OnInit {
 			type: pollution.type,
 			description: pollution.description,
 			observedAt: pollution.observedAt,
+			dangerLevel: pollution.dangerLevel,
 			location: pollution.location,
 			latitude: pollution.latitude,
 			longitude: pollution.longitude,
