@@ -31,6 +31,7 @@ describe('PollutionService', () => {
 			type: 'Plastique',
 			description: 'Des déchets sont accumulés près de la rivière.',
 			observedAt: '2026-06-12',
+			dangerLevel: 42,
 			location: 'Paris',
 			latitude: 48.85,
 			longitude: 2.35,

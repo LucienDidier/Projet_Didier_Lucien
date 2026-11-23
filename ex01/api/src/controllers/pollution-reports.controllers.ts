@@ -128,7 +128,7 @@ function parseReport(value: unknown): PollutionReportInput | null {
     return null;
   }
 
-  const { title, type, description, observedAt, location, latitude, longitude } = value;
+  const { title, type, description, observedAt, dangerLevel, location, latitude, longitude } = value;
   const photoUrl = value["photoUrl"] ?? "";
 
   if (
@@ -142,6 +142,9 @@ function parseReport(value: unknown): PollutionReportInput | null {
     description.trim().length > 2000 ||
     typeof observedAt !== "string" ||
     !isValidObservationDate(observedAt) ||
+    typeof dangerLevel !== "number" ||
+    !Number.isFinite(dangerLevel) ||
+    dangerLevel < 0 ||
     typeof location !== "string" ||
     location.trim().length < 3 ||
     location.trim().length > 200 ||
@@ -166,6 +169,7 @@ function parseReport(value: unknown): PollutionReportInput | null {
     type,
     description: description.trim(),
     observedAt,
+    dangerLevel,
     location: location.trim(),
     latitude,
     longitude,

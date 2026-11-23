@@ -1,4 +1,5 @@
 import { Application, Router } from "express";
+import authenticate from "../middleware/auth.middleware";
 import pollutionController from "../controllers/pollution.controllers";
 import pollutionReportsController from "../controllers/pollution-reports.controllers";
 
@@ -9,6 +10,7 @@ export default (app: Application): void => {
   legacyRouter.get("/:id", pollutionController.getById);
 
   const reportsRouter = Router();
+  reportsRouter.use(authenticate);
   reportsRouter.get("/", pollutionReportsController.getAll);
   reportsRouter.get("/:id", pollutionReportsController.getById);
   reportsRouter.post("/", pollutionReportsController.create);

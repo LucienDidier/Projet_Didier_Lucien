@@ -4,12 +4,15 @@ The API uses PostgreSQL and exposes the endpoints consumed by the Angular app.
 
 ## Users
 
-- `GET /api/users` — list users (`id`, `name`, and `email`)
+- `POST /api/auth/login` — authenticate with `email` and `password`; returns a one-hour bearer token
+- `GET /api/users` — list users (`id`, `name`, and `email`), requires a bearer token
 - `POST /api/users` — create a user with `name`, `email`, and `password`
 
 Passwords are stored as scrypt-derived hashes and are never included in API responses.
 
 ## Pollution reports
+
+All `/api/pollutions` endpoints require the bearer token returned by login:
 
 - `GET /api/pollutions`
 - `GET /api/pollutions/:id`
@@ -30,6 +33,9 @@ npm ci --prefix ex01
 npm ci --prefix ex01/api
 ```
 
+Set `AUTH_TOKEN_SECRET` to a private random value of at least 32 characters before
+starting the API. Do not commit the secret.
+
 From the repository root, run `npm start` to start the API and Angular development server
 together. The API listens on port 3000 and Angular on port 4200.
 
@@ -37,4 +43,4 @@ together. The API listens on port 3000 and Angular on port 4200.
 
 The root `render.yaml` deploys this API from `ex01/api` and the Angular app from `ex01`.
 Render supplies `DATABASE_URL`; the frontend build uses `API_HOST` to generate its
-production API URL.
+production API URL. The blueprint generates `AUTH_TOKEN_SECRET` for the API.

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { UserService } from './user.service';
 import { SignUp } from './sign-up';
@@ -6,15 +7,13 @@ import { SignUp } from './sign-up';
 describe('SignUp', () => {
 	const userService = {
 		create: vi.fn(() => of({})),
-		getAll: vi.fn(() => of([])),
 	};
 
 	beforeEach(async () => {
 		userService.create.mockClear();
-		userService.getAll.mockClear();
 		await TestBed.configureTestingModule({
 			imports: [SignUp],
-			providers: [{ provide: UserService, useValue: userService }],
+			providers: [provideRouter([]), { provide: UserService, useValue: userService }],
 		}).compileComponents();
 	});
 
@@ -68,7 +67,6 @@ describe('SignUp', () => {
 			email: 'lucie@example.com',
 			password: 'StrongPass1!',
 		});
-		expect(userService.getAll).toHaveBeenCalled();
 		expect(element.textContent).toContain('compte a été créé');
 	});
 });

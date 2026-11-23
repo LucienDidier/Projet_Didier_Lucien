@@ -51,6 +51,21 @@
 				</label>
 
 				<label class="field">
+					<span>Niveau de dangerosité</span>
+					<input
+						id="dangerLevel"
+						type="number"
+						formControlName="dangerLevel"
+						[min]="limits.dangerLevel.minimum"
+						step="any"
+					/>
+					<app-error-field
+						[control]="form.controls.dangerLevel"
+						[messages]="errorMessages.dangerLevel"
+					/>
+				</label>
+
+				<label class="field">
 					<span>Lieu</span>
 					<input
 						id="location"

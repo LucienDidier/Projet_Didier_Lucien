@@ -21,6 +21,16 @@
 			<dd>{{ report.observedAt }}</dd>
 		</div>
 		<div class="detail">
+			<dt>Niveau de dangerosité</dt>
+			<dd>{{ report.dangerLevel }}</dd>
+		</div>
+		<div class="detail">
+			<dt>Statut de pollution</dt>
+			<dd class="pollution-status" [appHighlightPollution]="report.dangerLevel | pollutionLevel">
+				{{ report.dangerLevel | pollutionLevel }}
+			</dd>
+		</div>
+		<div class="detail">
 			<dt>Lieu</dt>
 			<dd>{{ report.location }}</dd>
 		</div>

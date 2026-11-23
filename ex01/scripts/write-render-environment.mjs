@@ -13,7 +13,6 @@ if (parsedHost.pathname !== "/" || parsedHost.search || parsedHost.hash) {
 
 const environment = `export const environment = {
 \tapiUrl: 'https://${parsedHost.host}/api',
-\tpollutionStorage: 'api',
 \tproduction: true,
 } as const;
 `;

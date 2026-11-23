@@ -81,6 +81,14 @@ dd {
 	word-break: break-word;
 }
 
+.pollution-status {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 4px;
+	color: #17212b;
+	font-weight: 650;
+}
+
 .preserve-lines {
 	white-space: pre-wrap;
 }

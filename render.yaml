@@ -27,6 +27,8 @@ services:
         fromDatabase:
           name: pollution-db
           property: connectionString
+      - key: AUTH_TOKEN_SECRET
+        generateValue: true
       - key: FRONTEND_ORIGIN
         value: https://pollution-front.onrender.com
 

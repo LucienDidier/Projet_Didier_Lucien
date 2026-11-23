@@ -1,0 +1,34 @@
+<div class="signup-page">
+	<section class="signup-panel" aria-labelledby="signin-title">
+		<div class="eyebrow"><span class="eyebrow-mark"></span> Accès à la plateforme</div>
+		<h1 id="signin-title">Connexion</h1>
+		<p class="intro">Connectez-vous pour consulter et gérer les signalements.</p>
+
+		<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+			<label class="field">
+				<span>Adresse e-mail</span>
+				<input id="email" type="email" formControlName="email" autocomplete="email" maxlength="254" />
+			</label>
+
+			<label class="field">
+				<span>Mot de passe</span>
+				<input
+					id="password"
+					type="password"
+					formControlName="password"
+					autocomplete="current-password"
+					maxlength="128"
+				/>
+			</label>
+
+			<button type="submit" [disabled]="isSubmitting">
+				{{ isSubmitting ? 'Connexion…' : 'Se connecter' }}
+			</button>
+		</form>
+
+		@if (errorMessage) {
+			<p class="feedback error" role="alert">{{ errorMessage }}</p>
+		}
+		<p class="intro">Pas encore de compte ? <a routerLink="/inscription">Créer un compte</a></p>
+	</section>
+</div>
