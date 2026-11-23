@@ -1,22 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
-import { PollutionService } from './pollution-declaration/pollution.service';
+import { appRoutes } from './app.routes';
+import { AuthService } from './auth/auth.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
+        provideRouter(appRoutes),
         {
-          provide: PollutionService,
-          useValue: {
-            getAll: () => of([]),
-            getById: () => of({}),
-            create: () => of({}),
-            update: () => of({}),
-            delete: () => of(undefined),
-          },
+          provide: AuthService,
+          useValue: { isAuthenticated: () => false, logout: vi.fn() },
         },
       ],
     })
@@ -29,13 +25,11 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render the signup and pollution declaration forms', async () => {
+  it('renders the router outlet and public navigation', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-sign-up h1')?.textContent).toContain('Inscription');
-    expect(compiled.querySelector('app-pollution-declaration h1')?.textContent).toContain(
-      'Déclarer une pollution',
-    );
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    expect(compiled.querySelector('a[routerLink="/connexion"]')).toBeTruthy();
   });
 });

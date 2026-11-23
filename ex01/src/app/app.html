@@ -1,2 +1,13 @@
-<app-sign-up />
-<app-pollution-declaration />
+<header class="site-header">
+	<a class="site-title" routerLink="/">Signalements citoyens</a>
+	<nav aria-label="Navigation principale">
+		@if (auth.isAuthenticated()) {
+			<a routerLink="/pollutions">Pollutions</a>
+			<button type="button" class="logout-button" (click)="logout()">Déconnexion</button>
+		} @else {
+			<a routerLink="/connexion">Connexion</a>
+			<a routerLink="/inscription">Inscription</a>
+		}
+	</nav>
+</header>
+<router-outlet />

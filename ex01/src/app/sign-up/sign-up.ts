@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
 	FormControl,
@@ -6,6 +6,7 @@ import {
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ErrorField } from '../shared/error-field/error-field';
 import { minTrimmedLength, notBlank, validEmail, validPersonName } from '../validators';
 import { UserService } from './user.service';
@@ -41,12 +42,12 @@ type SignUpForm = FormGroup<{
 }>;
 
 @Component({
-	imports: [ErrorField, ReactiveFormsModule],
+	imports: [ErrorField, ReactiveFormsModule, RouterLink],
 	selector: 'app-sign-up',
 	styleUrl: './sign-up.scss',
 	templateUrl: './sign-up.html',
 })
-export class SignUp implements OnInit {
+export class SignUp {
 	private readonly userService = inject(UserService);
 
 	protected readonly errorMessages = SIGN_UP_ERROR_MESSAGES;
@@ -83,15 +84,8 @@ export class SignUp implements OnInit {
 	});
 
 	protected isSubmitting = false;
-	protected isLoadingUsers = false;
 	protected successMessage = '';
 	protected errorMessage = '';
-	protected usersErrorMessage = '';
-	protected userCount = 0;
-
-	ngOnInit(): void {
-		this.loadUsers();
-	}
 
 	protected submit(): void {
 		if (this.form.invalid || this.isSubmitting) {
@@ -113,7 +107,6 @@ export class SignUp implements OnInit {
 					response?.message || 'Votre compte a été créé avec succès.';
 				this.form.reset();
 				this.isSubmitting = false;
-				this.loadUsers();
 			},
 			error: (error: unknown) => {
 				this.errorMessage = error instanceof HttpErrorResponse && error.status === 409
@@ -124,18 +117,4 @@ export class SignUp implements OnInit {
 		});
 	}
 
-	private loadUsers(): void {
-		this.isLoadingUsers = true;
-		this.usersErrorMessage = '';
-		this.userService.getAll().subscribe({
-			next: (users) => {
-				this.userCount = users.length;
-				this.isLoadingUsers = false;
-			},
-			error: () => {
-				this.usersErrorMessage = 'La liste des utilisateurs ne peut pas être chargée.';
-				this.isLoadingUsers = false;
-			},
-		});
-	}
 }

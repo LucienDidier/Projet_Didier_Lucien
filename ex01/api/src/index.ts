@@ -4,6 +4,7 @@ import cors, { CorsOptions } from "cors";
 import { DataTypes } from "sequelize";
 import db from "./models";
 import initRoutes from "./routes";
+import { assertTokenSecretConfigured } from "./auth/tokens";
 
 const app: Application = express();
 
@@ -41,6 +42,7 @@ app.get("/health", (_req: Request, res: Response) => {
 initRoutes(app);
 
 async function startServer(): Promise<void> {
+  assertTokenSecretConfigured();
   await db.sequelize.sync();
   const reportColumns = await db.sequelize
     .getQueryInterface()

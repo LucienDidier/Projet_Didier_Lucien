@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { HighlightPollutionDirective } from '../shared/highlight-pollution.directive';
 import { PollutionLevelPipe } from '../shared/pollution-level.pipe';
 import { PollutionType } from '../pollution-type';
@@ -17,6 +17,7 @@ export interface PollutionReport {
 
 @Component({
 	imports: [HighlightPollutionDirective, PollutionLevelPipe],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	selector: 'app-pollution-recap',
 	styleUrl: './pollution-recap.scss',
 	templateUrl: './pollution-recap.html',
